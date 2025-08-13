@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.9">
+    <title>Orologio Fullscreen</title>
+    <style>
+        /* Stili per il corpo */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background-color: white;
+            color: black;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        /* Stili per l'immagine */
+        .image {
+            max-width: 70%;
+            height: auto;
+            margin: 20px auto;
+        }
+
+        /* Stili per l'orologio */
+        #clock {
+            font-size: 13vw; /* Usa 'vw' per la dimensione del testo */
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        /* Stili per il pulsante */
+        button {
+            position: fixed;
+            top: 30vh;
+            right: 3vw;
+            padding: 1vh 1vw;
+            font-size: 4vw;
+            cursor: pointer;
+            border-radius: 15px;
+            background-color: #a5d9fd;
+            border: none;
+        }
+
+        /* Media queries per schermi più grandi */
+        @media (min-width: 768px) {
+            #clock {
+                font-size: 9rem;
+            }
+
+            .image {
+                height: 100px;
+                max-width: 200px;
+                margin-top: 30px;
+            }
+
+            button {
+                top: 350px;
+                right: 90px;
+                padding: 10px 20px;
+                font-size: 20px;
+            }
+        }
+        @media (min-width: 1080px) and (min-height: 720px) {
+            #clock {
+                font-size: 20rem;
+            }
+
+            .image {
+                height: 100px;
+                max-width: 200px;
+                margin-top: 30px;
+            }
+
+            button {
+                top: 550px;
+                right: 90px;
+                padding: 10px 20px;
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<img src="data:image/png;base64,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" class="image">
+<div id="clock">00:00:00</div>
+<button onclick="playBeep()">Play Beep</button>
+<script>
+    // Stato per evitare riproduzioni multiple
+    let lastBeepMinute = null;      // per il beep ogni 10 minuti (una sola volta a :00 secondi)
+    let lastShortBeepSecond = null; // per i beep corti ai secondi 55-59 (una volta per secondo)
+
+    function updateClock() {
+        const clockElement = document.getElementById('clock');
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        const milliseconds = String(now.getMilliseconds()).padStart(2, '0');
+        if (milliseconds.length===1){
+            clockElement.textContent = `${hours}:${minutes}:${seconds}:00${milliseconds}`;
+        }
+        else if(milliseconds.length===2){
+            clockElement.textContent = `${hours}:${minutes}:${seconds}:0${milliseconds}`;
+        }
+        else{
+            clockElement.textContent = `${hours}:${minutes}:${seconds}:${milliseconds}`;
+        }
+        // Check if it's time to play the beep every 10 minutes
+        if (Number(minutes) % 1 === 0 && seconds === '00' && lastBeepMinute !== minutes) {
+            playBeep();
+            lastBeepMinute = minutes;
+
+        }
+        // Beep corto: una sola volta per ciascuno dei secondi 55..59
+        const shortRange = ['50','55','56','57','58','59'];
+        if (shortRange.includes(seconds) && lastShortBeepSecond !== seconds) {
+            playBeep_short();
+            lastShortBeepSecond = seconds;
+        }
+    }
+
+    function playBeep() {
+        const audioCtx = new AudioContext();
+        const oscillator = audioCtx.createOscillator();
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(580, audioCtx.currentTime); // A4 note
+        oscillator.connect(audioCtx.destination);
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 1); // Beep duration
+    }
+
+    function playBeep_short() {
+        const audioCtx = new AudioContext();
+        const oscillator = audioCtx.createOscillator();
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(550, audioCtx.currentTime); // A4 note
+        oscillator.connect(audioCtx.destination);
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 0.5); // Beep duration
+    }
+
+    setInterval(updateClock, 1);
+    updateClock(); // Initialize the clock immediately
+</script>
+</body>
+</html>
